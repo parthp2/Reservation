@@ -1,4 +1,4 @@
-package com.parthpatel.Reservation;
+package com.parthpatel;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
