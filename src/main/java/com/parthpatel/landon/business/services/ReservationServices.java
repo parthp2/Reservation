@@ -2,6 +2,7 @@ package com.parthpatel.landon.business.services;
 
 
 import com.parthpatel.landon.business.domain.RoomReservation;
+import com.parthpatel.landon.data.entity.Guest;
 import com.parthpatel.landon.data.entity.Reservation;
 import com.parthpatel.landon.data.entity.Room;
 import com.parthpatel.landon.data.repository.GuestRepository;
@@ -43,6 +44,28 @@ public class ReservationServices {
 
         Iterable<Reservation> reservations=this.reservationRepository.findByDate(new java.sql.Date(date.getTime()));
 
-        
+        if(null!=reservations)
+            reservations.forEach( reservation -> {
+              Guest guest=this.guestRepository.findOne(reservation.getGuestId());
+
+              if(null!=guest) {
+                  RoomReservation roomReservation = roomReservationMap.get(reservation.getId());
+                  roomReservation.setFirstName(guest.getFirstName());
+                  roomReservation.setLastName(guest.getLastName());
+                  roomReservation.setGuestId(guest.getId());
+              }
+            }
+            );
+        List<RoomReservation> roomReservations=new ArrayList<>();
+
+        for(Long roomId:roomReservationMap.keySet())
+        {
+            roomReservations.add(roomReservationMap.get(roomId));
+        }
+
+        return roomReservations;
     }
+
+
+
 }
